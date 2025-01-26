@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Senotherapeutics Network</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+    <link href="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        #network {
+            width: 100%;
+            height: 800px;
+            border: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Senotherapeutics Network</h1>
+    <p>Explore the relationships between categories of senotherapeutics, their associated drugs, and mechanisms of action.</p>
+    <div id="network"></div>
+
+    <script>
+        // Define nodes
+        var nodes = new vis.DataSet([
+            { id: 1, label: 'Senotherapeutics', color: 'blue', font: { size: 20 } },
+            { id: 2, label: 'Senolytics', color: 'green' },
+            { id: 3, label: 'Senomorphics', color: 'yellow' },
+            { id: 4, label: 'Senoblockers', color: 'red' },
+            { id: 5, label: 'Senoreversers', color: 'purple' },
+
+            // Senolytics drugs
+            { id: 6, label: 'Dasatinib + Quercetin', color: 'green' },
+            { id: 7, label: 'ABT-737', color: 'green' },
+            { id: 8, label: 'ABT-263 (Navitoclax)', color: 'green' },
+            { id: 9, label: 'A-1331852', color: 'green' },
+            { id: 10, label: 'A-1155463', color: 'green' },
+            { id: 11, label: '17-DMAG (alvespimycin)', color: 'green' },
+            { id: 12, label: 'Geldanamycin', color: 'green' },
+            { id: 13, label: '17-AAG (tanespimycin)', color: 'green' },
+            { id: 14, label: 'Ganetespib', color: 'green' },
+            { id: 15, label: 'FOXO4-DRI', color: 'green' },
+            { id: 16, label: 'UBX0101', color: 'green' },
+            { id: 17, label: 'RG7112 (RO5045337)', color: 'green' },
+            { id: 18, label: 'P5091', color: 'green' },
+            { id: 19, label: 'P22077', color: 'green' },
+            { id: 20, label: 'Panobinostat (Pano)', color: 'green' },
+            { id: 21, label: 'Proscillaridin A', color: 'green' },
+            { id: 22, label: 'Ouabain', color: 'green' },
+            { id: 23, label: 'Digoxin', color: 'green' },
+            { id: 24, label: 'Fisetin', color: 'green' },
+            { id: 25, label: 'Epigallocatechin Gallate (EGCG)', color: 'green' },
+            { id: 26, label: 'Genistein', color: 'green' },
+            { id: 27, label: 'EF-24 (curcumin analogue)', color: 'green' },
+
+            // Senomorphics drugs
+            { id: 28, label: 'Apigenin', color: 'yellow' },
+            { id: 29, label: 'Kaempferol', color: 'yellow' },
+            { id: 30, label: 'Oleuropein', color: 'yellow' },
+            { id: 31, label: 'Rapamycin', color: 'yellow' },
+            { id: 32, label: 'Azithromycin', color: 'yellow' },
+            { id: 33, label: 'Roxithromycin', color: 'yellow' },
+            { id: 34, label: 'Metformin', color: 'yellow' },
+            { id: 35, label: 'Resveratrol', color: 'yellow' },
+            { id: 36, label: 'NMN', color: 'yellow' },
+            { id: 37, label: 'Ruxolitinib', color: 'yellow' },
+            { id: 38, label: 'KU-55933', color: 'yellow' },
+            { id: 39, label: 'KU-60019', color: 'yellow' },
+            { id: 40, label: 'Atorvastatin', color: 'yellow' },
+            { id: 41, label: 'Pravastatin', color: 'yellow' },
+            { id: 42, label: 'Pitavastatin', color: 'yellow' },
+            { id: 43, label: 'Simvastatin', color: 'yellow' },
+            { id: 44, label: 'Tocilizumab', color: 'yellow' },
+            { id: 45, label: 'Pirfenidone', color: 'yellow' },
+            { id: 46, label: 'Doxycycline', color: 'yellow' },
+            { id: 47, label: 'NSAIDs (aspirin, ibuprofen)', color: 'yellow' },
+            { id: 48, label: 'AntagomiRs (anti-miR-146a)', color: 'yellow' },
+            { id: 49, label: 'Neutralizing antibodies', color: 'yellow' },
+
+            // Senoblockers drugs
+            { id: 50, label: 'Metformin', color: 'red' },
+            { id: 51, label: 'Resveratrol', color: 'red' },
+            { id: 52, label: 'Alisertib', color: 'red' },
+
+            // Senoreversers drugs
+            { id: 53, label: 'Reversine', color: 'purple' },
+            { id: 54, label: 'hESC-Exos (miR-302b)', color: 'purple' }
+        ]);
+
+        // Define edges
+        var edges = new vis.DataSet([
+            { from: 1, to: 2 },
+            { from: 1, to: 3 },
+            { from: 1, to: 4 },
+            { from: 1, to: 5 },
+
+            // Connections to Senolytics drugs
+            { from: 2, to: 6, label: 'Targets SCAPs' },
+            { from: 2, to: 7, label: 'Inhibits BCL-2, BCL-XL, BCL-W' },
+            { from: 2, to: 8, label: 'Inhibits BCL-2, BCL-XL, BCL-W' },
+            { from: 2, to: 9, label: 'Inhibits BCL-XL' },
+            { from: 2, to: 10, label: 'Inhibits BCL-XL' },
+            { from: 2, to: 11, label: 'Disrupts HSP90-AKT' },
+            { from: 2, to: 12, label: 'Inhibits HSP90' },
+            { from: 2, to: 13, label: 'Inhibits HSP90' },
+            { from: 2, to: 14, label: 'Inhibits HSP90' },
+            { from: 2, to: 15, label: 'Disrupts FOXO4-p53' },
+            { from: 2, to: 16, label: 'Disrupts MDM2/p53' },
+            { from: 2, to: 17, label: 'Disrupts MDM2/p53' },
+            { from: 2, to: 18, label: 'USP7 inhibitor' },
+            { from: 2, to: 19, label: 'USP7 inhibitor' },
+            { from: 2, to: 20, label: 'HDAC inhibitor' },
+            { from: 2, to: 21, label: 'Inhibits Na+/K+-ATPase' },
+            { from: 2, to: 22, label: 'Inhibits Na+/K+-ATPase' },
+            { from: 2, to: 23, label: 'Induces apoptosis' },
+            { from: 2, to: 24, label: 'Targets BCL-2, PI3K/AKT' },
+            { from: 2, to: 25, label: 'mTOR inhibitor' },
+            { from: 2, to: 26, label: 'mTOR, AMPK ERβ modulator' },
+            { from: 2, to: 27, label: 'Targets BCL-2' },
+
+            // Connections to Senomorphics drugs
+            { from: 3, to: 28, label: 'Blocks ATM/p38' },
+            { from: 3, to: 29, label: 'PDK1 inhibition' },
+            { from: 3, to: 30, label: 'Regulates Cx43' },
+            { from: 3, to: 31, label: 'mTOR inhibition' },
+            { from: 3, to: 32, label: 'Induces autophagy' },
+            { from: 3, to: 33, label: 'Targets NOX4' },
+            { from: 3, to: 34, label: 'Activates AMPK' },
+            { from: 3, to: 35, label: 'Activates SIRT1' },
+            { from: 3, to: 36, label: 'Precursor of NAD+' },
+            { from: 3, to: 37, label: 'JAK1/2 inhibitor' },
+            { from: 3, to: 38, label: 'ATM inhibitor' },
+            { from: 3, to: 39, label: 'ATM inhibitor' },
+            { from: 3, to: 40, label: 'HMG-CoA reductase inhibitor' },
+            { from: 3, to: 41, label: 'HMG-CoA reductase inhibitor' },
+            { from: 3, to: 42, label: 'HMG-CoA reductase inhibitor' },
+            { from: 3, to: 43, label: 'HMG-CoA reductase inhibitor' },
+            { from: 3, to: 44, label: 'Blocks IL-6 receptor' },
+            { from: 3, to: 45, label: 'Blocks TGF-β signaling' },
+            { from: 3, to: 46, label: 'Inhibits MMPs' },
+            { from: 3, to: 47, label: 'Reduces prostaglandin production' },
+            { from: 3, to: 48, label: 'Blocks miRNAs involved in inflammation' },
+            { from: 3, to: 49, label: 'Disrupts exosome release' },
+
+            // Connections to Senoblockers drugs
+            { from: 4, to: 50, label: 'Activates AMPK' },
+            { from: 4, to: 51, label: 'Activates SIRT1' },
+            { from: 4, to: 52, label: 'Inhibits Aurora A kinase' },
+
+            // Connections to Senoreversers drugs
+            { from: 5, to: 53, label: 'Inhibits Aurora B kinase' },
+            { from: 5, to: 54, label: 'Targets Cdkn1a and Ccng2' }
+        ]);
+
+        // Create a network
+        var container = document.getElementById('network');
+        var data = {
+            nodes: nodes,
+            edges: edges
+        };
+        var options = {
+            nodes: {
+                shape: 'dot',
+                size: 15
+            },
+            edges: {
+                arrows: 'to',
+                font: {
+                    align: 'middle'
+                }
+            },
+            physics: {
+                stabilization: false
+            }
+        };
+        var network = new vis.Network(container, data, options);
+    </script>
+</body>
+</html>
